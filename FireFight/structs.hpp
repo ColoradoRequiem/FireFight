@@ -21,6 +21,8 @@ struct Tool
 {
   int weight;
   string name;
+  string used; // a string to say "the fire extriguisher blows out foam and covers the fire" a generic statement that can be said in any room.
+  bool used; // more for singular stuff like a distress signal if we choose to do that; can be removed if you want
 };
 
 struct Person
@@ -35,35 +37,37 @@ struct Edge
 {
     vertex *v;
     bool access; // will or will not let player pass
+    string type; // this will be referenced if its a door or hole or something
 };
 
 struct Impediment
 {
   string description; // becuase included in room, this will display have the description of the room
   std::vector<Tool> solve; // will check to see if player has a copy of said tool to remove impediment
+  std::vector<Person> solve2; // in case we want to have say the engineer needed to fix the engine. can get rid of if you want
   int time; // time it takes to get rid of the Impediment
 };
 
 
-
-/*this is the struct for each vertex in the graph. */
 struct Room
 {
-    std::string description;
-    bool visited; // not sure if we need this
-    std::vector<Edge> Edges; //stores edges to adjacent vertices
-    std::vector<Impediment> obsticles; // will change the "access" of certain 'Edges' at their address'
-    std::vector<Tool> objects; // what can be found in the room
+  string name;
+  std::string description;
+  bool visited; // not sure if we need this
+  std::vector<Edge> Edges; //stores edges to adjacent vertices
+  std::vector<Impediment> obsticles; // will change the "access" of certain 'Edges' at their address'
+  std::vector<Tool> objects; // what can be found in the room
+  std::vector<Person> occupied;
 };
 
-class Graph
+class Ship // Graph
 {
   public:
-    Graph();
-    ~Graph();
+    Ship(); // will be our classic loadup
+    ~Ship();
     void addVertex(std::string cityName);
     void addEdge(std::string city1, std::string city2, int distance);
-    void displayEdges();
+    void displayEdges(); // would be cool if we had a map to show user on each level, just a thought
     void printDFT();
     void printBFT();
     void setAllVerticesUnvisited();
