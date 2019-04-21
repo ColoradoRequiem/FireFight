@@ -21,7 +21,7 @@ struct Tool
 {
   int weight;
   string name;
-  string used; // a string to say "the fire extriguisher blows out foam and covers the fire" a generic statement that can be said in any room.
+  string use; // a string to say "the fire extriguisher blows out foam and covers the fire" a generic statement that can be said in any room.
   bool used; // more for singular stuff like a distress signal if we choose to do that; can be removed if you want
 };
 
@@ -35,17 +35,16 @@ struct Person
 
 struct Edge
 {
-    vertex *v;
-    bool access; // will or will not let player pass
-    string type; // this will be referenced if its a door or hole or something
+  vertex *v;
+  bool access; // will or will not let player pass
 };
 
 struct Impediment
 {
   string description; // becuase included in room, this will display have the description of the room
-  std::vector<Tool> solve; // will check to see if player has a copy of said tool to remove impediment
-  std::vector<Person> solve2; // in case we want to have say the engineer needed to fix the engine. can get rid of if you want
+  std::string solve; // will check to see if player has a copy of said tool to remove impediment
   int time; // time it takes to get rid of the Impediment
+
 };
 
 
@@ -63,10 +62,27 @@ struct Room
 class Ship // Graph
 {
   public:
-    Ship(); // will be our classic loadup
+
+    //// Ship SETUP ////
+
+    /*
+    since during the game we will be changing things about the rooms and their coniditions
+    it should be okay to make the ship in main too vs a  constructor, this is like
+    in our past assignments
+    */
+
+    Ship();
     ~Ship();
-    void addVertex(std::string cityName);
-    void addEdge(std::string city1, std::string city2, int distance);
+
+    void addRoom(std::string name, std::string description);
+    void addEdge(std::string room1, std::string room2); // some are only one way and some wont be
+
+    void addObsticle(std::string room1, std::string room2); // will be simialr to addEdge i think
+    void removeObsticle();
+
+    void dropTool();
+    void addTool();
+
     void displayEdges(); // would be cool if we had a map to show user on each level, just a thought
     void printDFT();
     void printBFT();
@@ -75,7 +91,7 @@ class Ship // Graph
   private:
     std::vector<vertex> vertices; //stores vertices
 
-    vertex *findVertex(std::string name);
+    Room *findVertex(std::string name);
     void BFT_traversal(vertex *v);
     void DFT_traversal(vertex *v);
 
