@@ -25,14 +25,6 @@ struct Tool
   bool used; // more for singular stuff like a distress signal if we choose to do that; can be removed if you want
 };
 
-struct Person
-{
-  int health;
-  string name;
-  std::vector<Tool> bag; // what can be found on the person
-  int maxWeight;
-};
-
 struct Edge
 {
   vertex *v;
@@ -42,9 +34,10 @@ struct Edge
 struct Impediment
 {
   string description; // becuase included in room, this will display have the description of the room
-  std::string solve; // will check to see if player has a copy of said tool to remove impediment
+  std::string tool; // will check to see if player has a copy of said tool to remove impediment
   int time; // time it takes to get rid of the Impediment
-
+  bool active;
+  Edge *e;
 };
 
 
@@ -57,6 +50,20 @@ struct Room
   std::vector<Impediment> obsticles; // will change the "access" of certain 'Edges' at their address'
   std::vector<Tool> objects; // what can be found in the room
   std::vector<Person> occupied;
+};
+
+class Player
+{
+public:
+  void moveRoom();
+
+  void addItem();
+  void dropItem();
+private:
+  std::vector<Tool> bag;
+  int maxWeight;
+  string name;
+  int health;
 };
 
 class Ship // Graph
@@ -77,11 +84,8 @@ class Ship // Graph
     void addRoom(std::string name, std::string description);
     void addEdge(std::string room1, std::string room2); // some are only one way and some wont be
 
-    void addObsticle(std::string room1, std::string room2); // will be simialr to addEdge i think
-    void removeObsticle();
-
-    void dropTool();
-    void addTool();
+    void addObsticle(std::string description, std::string tool, int time, std::string room1, std::string room2); // will be simialr to addEdge i think
+    void removeObsticle(std::string room1, std::string room2);
 
     void displayEdges(); // would be cool if we had a map to show user on each level, just a thought
     void printDFT();
@@ -92,6 +96,7 @@ class Ship // Graph
     std::vector<vertex> vertices; //stores vertices
 
     Room *findVertex(std::string name);
+    Edge *findEdge(string room1, string room2)
     void BFT_traversal(vertex *v);
     void DFT_traversal(vertex *v);
 

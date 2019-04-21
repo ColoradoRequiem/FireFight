@@ -56,7 +56,6 @@ Ship::Ship() // we could do this in the main, but i want the main to be the game
 
 
 
-
 }
 Ship::~Ship()
 {
@@ -77,9 +76,9 @@ void Ship::addEdge(std::string room1, std::string room2)
   Room* rTwo = findVertex(room2);
 
   Edge* n = new Edge;
-  n->v = cTwo;
+  n->v = rTwo;
   n->access = true;
-  cOne->Edges.push_back(*n);
+  rOne->Edges.push_back(*n);
 }
 
 Room* Ship::findVertex(std::string name)
@@ -94,7 +93,56 @@ Room* Ship::findVertex(std::string name)
   return nullptr;
 }
 
-void Ship::addObsticle(string d, )
+Edge* Ship::findEdge(string room1, string room2)
+{
+  for (int i = 0; i < vertices.size(); i++)
+  {
+    if (vertices[i].name == room1)
+    {
+      for (int j = 0; j < (vertices[i]->Edges).length()); j++)
+      {
+        if (vertices[i]->Edges[j]->v->name == room2)
+        {
+          return (vertices[i]->Edges[j]);
+        }
+      }
+    }
+  }
+  return nullptr;
+}
+
+void Ship::addObsticle(string d, string t, int time, string room1, string room2)
+{
+  Impediment new;
+  new->description = d;
+  new->tool = t;
+  new->time = time;
+  new->active = true;
+
+  (findEdge(room1, room2))->access = false;
+  new->e = findEdge(room1, room2);
+
+
+  Room* rOne = findVertex(room1);
+  Room* rTwo = findVertex(room2);
+
+  rOne->obsticles.push_back(new);
+}
+
+void Ship::removeObsticle(string room1, string room2)
+{
+  Room* rOne = findVertex(room1);
+  for (int i = 0; i < (rOne->obsticles).length(); i++)
+  {
+    if (rOne->obsticles[i]->e->v->n == room2)
+    {
+      rOne->obsticles[i]->e->access = true;
+      rOne->obsticles[i]->active = false;
+    }
+  }
+}
+
+void Ship::addTool(string name)
 {
 
 }
