@@ -54,7 +54,14 @@ Ship::Ship() // we could do this in the main, but i want the main to be the game
   addEdge("Overlook","Suits","Enter White Door");
   addEdge("Suits","Overlook","Go Back");
 
+  addTool("Code", 0, "BedroomTwo");
+  addTool("Crowbar", 5, "BedroomOne");
+  addTool("Fire Extinguisher", 10, "Storage")
 
+  addObsticle("It feels like heavy boxes have fallen against the other side.", "", "", "you successfully heave the door open and the boxes fall over.","Cockpit","Hall");
+  addObsticle("As soon as you open the door flames billow out towards you.","Fire Extinguisher","You need equipment to put out the fire", "You successfully put the flames out with the Extinguisher","Hold","Engine");
+  addObsticle("You need a code in order to open this door","Code","You dont know the code","You enter in the correct code","Overlook","Airlock");
+  addObsticle("The latch appears to be stuck although could be opened if you had some leverage.","Crowbar","You dont have enough strength.","You manage to wrench it open.","Hall","Storage");
 
 }
 Ship::~Ship()
@@ -112,38 +119,39 @@ Edge* Ship::findEdge(string room1, string room2)
   return nullptr;
 }
 
-void Ship::addObsticle(string d, string t, int time, string room1, string room2)
+void Ship::addObsticle(string d, string t, string f, string s, string room1, string room2)
 {
   Impediment new;
   new->description = d;
   new->tool = t;
-  new->time = time;
+  new->fail = f;
+  new->success = s;
   new->active = true;
-
-  (findEdge(room1, room2))->access = false;
   new->e = findEdge(room1, room2);
 
-
-  Room* rOne = findVertex(room1);
-  Room* rTwo = findVertex(room2);
-
-  rOne->obsticles.push_back(new);
+  e->access = false;
+  e->obsticles.push_back(new);
 }
 
 void Ship::removeObsticle(string room1, string room2)
 {
-  Room* rOne = findVertex(room1);
-  for (int i = 0; i < (rOne->obsticles).length(); i++)
+  Edge* e = findEdge(room1, room2);
+  for (int i = 0; i < (e->obsticles).length(); i++)
   {
-    if (rOne->obsticles[i]->e->v->n == room2)
+    if (e->obsticles[i]->e->v->n == room2)
     {
-      rOne->obsticles[i]->e->access = true;
-      rOne->obsticles[i]->active = false;
+      e->obsticles[i]->e->access = true;
+      e->obsticles[i]->active = false;
     }
   }
 }
 
-void Ship::addTool(string name)
+void Ship::addTool(string n, int w, string room)
 {
+  Tool* t;
+  t->name = n;
+  t->weight = w;
 
+  Room* rOne = findVertex(room);
+  rOne->objects.push_back(t);
 }

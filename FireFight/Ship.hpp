@@ -17,12 +17,12 @@ from a whole nother view. In either case the what kinda AI
 do we want to give crew that are alive on the ship?
 */
 
+// item check function in room
+
 struct Tool
 {
   int weight;
   string name;
-  string use; // a string to say "the fire extriguisher blows out foam and covers the fire" a generic statement that can be said in any room.
-  bool used; // more for singular stuff like a distress signal if we choose to do that; can be removed if you want
 };
 
 struct Edge
@@ -30,13 +30,15 @@ struct Edge
   vertex *v;
   string description;
   bool access; // will or will not let player pass
+  std::vector<Impediment> obsticles; // will change the "access" of certain 'Edges'
 };
 
 struct Impediment
 {
   string description; // becuase included in room, this will display have the description of the room
+  string fail;
+  string success;
   std::string tool; // will check to see if player has a copy of said tool to remove impediment
-  int time; // time it takes to get rid of the Impediment
   bool active;
   Edge *e;
 };
@@ -48,23 +50,13 @@ struct Room
   std::string description;
   bool visited; // not sure if we need this
   std::vector<Edge> Edges; //stores edges to adjacent vertices
-  std::vector<Impediment> obsticles; // will change the "access" of certain 'Edges' at their address'
   std::vector<Tool> objects; // what can be found in the room
   std::vector<Person> occupied;
 };
 
-class Player
+struct Player
 {
-public:
-  void moveRoom();
-
-  void addItem();
-  void dropItem();
-private:
   std::vector<Tool> bag;
-  int maxWeight;
-  string name;
-  int health;
 };
 
 class Ship // Graph
@@ -85,8 +77,10 @@ class Ship // Graph
     void addRoom(std::string name, std::string description);
     void addEdge(std::string room1, std::string room2, std::string description); // some are only one way and some wont be
 
-    void addObsticle(std::string description, std::string tool, int time, std::string room1, std::string room2); // will be simialr to addEdge i think
+    void addObsticle(std::string description, std::string tool, std::string fail, std::string success, std::string room1, std::string room2); // will be simialr to addEdge i think
     void removeObsticle(std::string room1, std::string room2);
+
+    void addTool(string name, string room);
 
     void displayEdges(); // would be cool if we had a map to show user on each level, just a thought
     void printDFT();
