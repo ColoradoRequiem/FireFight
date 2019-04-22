@@ -28,6 +28,7 @@ struct Tool
 struct Edge
 {
   vertex *v;
+  string description;
   bool access; // will or will not let player pass
 };
 
@@ -82,7 +83,7 @@ class Ship // Graph
     ~Ship();
 
     void addRoom(std::string name, std::string description);
-    void addEdge(std::string room1, std::string room2); // some are only one way and some wont be
+    void addEdge(std::string room1, std::string room2, std::string description); // some are only one way and some wont be
 
     void addObsticle(std::string description, std::string tool, int time, std::string room1, std::string room2); // will be simialr to addEdge i think
     void removeObsticle(std::string room1, std::string room2);

@@ -4,13 +4,6 @@ int main()
 {
   Ship TheHenry;
 
-  addRoom();
-
-
-
-sdfghjkhkjhklcnmbvhvjhfuyv
-fhjgkjgfhghj
-
 
 
 
