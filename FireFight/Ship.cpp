@@ -1,7 +1,7 @@
 #include <vector>
 #include <iostream>
 
-#include "ship.h"
+#include "Ship.hpp"
 
 using namespace std;
 
@@ -83,10 +83,10 @@ void Ship::addRoom(string n, string d)
 //  r->objects = v1;
   map.push_back(*r);
 
-//  for(int i = 0; i < (int)map.size();i++){
-//      std::cout << map[(unsigned)i].name << " ";
-//  }
-//  std::cout << " <> End ROOMS" << std::endl;
+ for(int i = 0; i < (int)map.size();i++){
+     std::cout << map[(unsigned)i].name << " ";
+ }
+ std::cout << " <> End ROOMS" << std::endl;
 
 }
 
