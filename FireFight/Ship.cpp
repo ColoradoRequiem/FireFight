@@ -1,11 +1,9 @@
-#include "Ship.hpp"
-
-#include <iostream>
 #include <vector>
+#include <iostream>
 
+#include "ship.h"
 
 using namespace std;
-
 
 Ship::Ship() // we could do this in the main, but i want the main to be the game, so ship will be defined here
 {
@@ -30,6 +28,7 @@ Ship::Ship() // we could do this in the main, but i want the main to be the game
   addRoom("ElevatorB", "A steel grey elevator that looks old but reliable. There are two buttons to go either up or down.");
   addRoom("Hold", "A large open space that looks to hold most of the cargo in the ship. There are two large bay doors off to the left that seem to be the main point of entry as well as a heavy metal door straight across with a red gleam underneeth and a second smaller door that faces the giant bay doors.");
   addRoom("Engine","A boiling hot room where a massive engine resides that powers the whole ship, you can hear all kinds of noises coming from it and feel the heat singing your eyebrows.");
+  addRoom("BedroomTwo","A small room in shambles with all kinds of eingineering tools scattered around that have unknown uses.");
 
   addEdge("Elevator","ElevatorB","Go Down");
   addEdge("ElevatorB","Elevator","Go Up");
@@ -56,12 +55,16 @@ Ship::Ship() // we could do this in the main, but i want the main to be the game
 
   addTool("Code", 0, "BedroomTwo");
   addTool("Crowbar", 5, "BedroomOne");
-  addTool("Fire Extinguisher", 10, "Storage")
+  addTool("Fire Extinguisher", 10, "Storage");
 
-  addObsticle("It feels like heavy boxes have fallen against the other side.", "", "", "you successfully heave the door open and the boxes fall over.","Cockpit","Hall");
+  addObsticle("It feels like heavy boxes have fallen against the other side.", "Crowbar", "Your measly hands have no effect", "you successfully heave the door open and the boxes fall over.","Cockpit","Hall");
   addObsticle("As soon as you open the door flames billow out towards you.","Fire Extinguisher","You need equipment to put out the fire", "You successfully put the flames out with the Extinguisher","Hold","Engine");
   addObsticle("You need a code in order to open this door","Code","You dont know the code","You enter in the correct code","Overlook","Airlock");
   addObsticle("The latch appears to be stuck although could be opened if you had some leverage.","Crowbar","You dont have enough strength.","You manage to wrench it open.","Hall","Storage");
+
+  // Begin in Bedroom 1
+
+  location = *findVertex("BedroomOne"); // Begins at Bedroom 1;
 
 }
 Ship::~Ship()
@@ -71,10 +74,20 @@ Ship::~Ship()
 
 void Ship::addRoom(string n, string d)
 {
-  Room* n = new Room;
-  n->name = n;
-  n->description = d;
-  vertices.push_back(*n);
+  Room* r = new Room;
+  r->name = n;
+  r->description = d;
+//  vector<Edge> v0;
+//  r->Edges = v0;
+//  vector<Tool> v1;
+//  r->objects = v1;
+  map.push_back(*r);
+
+//  for(int i = 0; i < (int)map.size();i++){
+//      std::cout << map[(unsigned)i].name << " ";
+//  }
+//  std::cout << " <> End ROOMS" << std::endl;
+
 }
 
 void Ship::addEdge(std::string room1, std::string room2, std::string d)
@@ -86,16 +99,26 @@ void Ship::addEdge(std::string room1, std::string room2, std::string d)
   n->v = rTwo;
   n->description = d;
   n->access = true;
+//  vector<Impediment> temp;
+//  n->obsticles = temp;
   rOne->Edges.push_back(*n);
+
+  std::cout << rOne->name << " --> ";
+
+  for(int i = 0; i < (int)rOne->Edges.size();i++){
+      std::cout << rOne->Edges[(unsigned)i].v->name << " ";
+  }
+
+  std::cout << " <> End EDGE" << std::endl;
 }
 
 Room* Ship::findVertex(std::string name)
 {
-  for (int i = 0; i < vertices.size(); i++)
+  for (int i = 0; i < (int)map.size(); i++)
   {
-    if (vertices[i].name == name)
+    if (map[(unsigned)i].name == name)
     {
-      return &(vertices[i]);
+      return &(map[(unsigned)i]);
     }
   }
   return nullptr;
@@ -103,55 +126,69 @@ Room* Ship::findVertex(std::string name)
 
 Edge* Ship::findEdge(string room1, string room2)
 {
-  for (int i = 0; i < vertices.size(); i++)
+  bool found = false;
+  for (int i = 0; i < (int)map.size(); i++)
   {
-    if (vertices[i].name == room1)
+    if (map[(unsigned)i].name == room1)
     {
-      for (int j = 0; j < (vertices[i]->Edges).length()); j++)
+      for (int j = 0; j < (int)(map[(unsigned)i].Edges.size()); j++)
       {
-        if (vertices[i]->Edges[j]->v->name == room2)
+        if (map[(unsigned)i].Edges[(unsigned)j].v->name == room2)
         {
-          return (vertices[i]->Edges[j]);
+          found = true;
+          return (&map[(unsigned)i].Edges[(unsigned)j]);
         }
       }
     }
   }
-  return nullptr;
+  if(!found){
+      std::cout << "found nothing" << std::endl;
+      return nullptr;
+  }
 }
 
 void Ship::addObsticle(string d, string t, string f, string s, string room1, string room2)
 {
-  Impediment new;
-  new->description = d;
-  new->tool = t;
-  new->fail = f;
-  new->success = s;
-  new->active = true;
-  new->e = findEdge(room1, room2);
+  Impediment n;
+  n.description = d;
+  n.tool = t;
+  n.fail = f;
+  n.success = s;
+  n.active = true;
+  n.e = findEdge(room1, room2);
 
-  e->access = false;
-  e->obsticles.push_back(new);
+//  n.e->access = false;
+  n.e->obsticles.push_back(n);
 }
 
 void Ship::removeObsticle(string room1, string room2)
 {
   Edge* e = findEdge(room1, room2);
-  for (int i = 0; i < (e->obsticles).length(); i++)
+  for (int i = 0; i < (int)(e->obsticles).size(); i++)
   {
-    if (e->obsticles[i]->e->v->n == room2)
+    if (e->obsticles[(unsigned)i].e->v->name == room2)
     {
-      e->obsticles[i]->e->access = true;
-      e->obsticles[i]->active = false;
+      e->obsticles[(unsigned)i].e->access = true;
+      e->obsticles[(unsigned)i].active = false;
     }
   }
 }
 
 void Ship::addTool(string n, int w, string room)
 {
-  Tool* t;
-  t->name = n;
-  t->weight = w;
+  Tool t;
+  t.name = n;
+  t.weight = w;
 
   Room* rOne = findVertex(room);
   rOne->objects.push_back(t);
+}
+
+std::string Ship::searchRoom(){
+    Room * r = &location;
+    if(r->objects.size() != 0){
+        return r->objects[0].name;
+    }else{
+        return "nothing";
+    }
 }
