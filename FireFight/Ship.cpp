@@ -72,16 +72,22 @@ Ship::Ship() // we could do this in the main, but i want the main to be the game
 }
 Ship::~Ship()
 {
-  // for (int i = 0; i < (int)map.size(); i++)
-  // {
-  //   std::cout << "Deleting " << map[i].name << " Edges: " << std:: endl;
-  //   for (int j = 0; j < (int)map[i].Edges.size(); j++)
-  //   {
-  //     std::cout << " -> " << map[i].Edges[j].v->name << std::endl;
-  //     delete (findEdge(map[i].name, map[i].Edges[j].v->name));
-  //   }
-  //   delete (findVertex(map[i].name));
-  // }
+  for (int i = 0; i < (int)map.size(); i++)
+  {
+    std::cout << "Deleting " << map[i].name << " Edges: " << std:: endl;
+    for (int j = 0; j < (int)map[i].Edges.size(); j++)
+    {
+      std::cout << " -> " << map[i].Edges[j].v->name << std::endl;
+      Edge* del = findEdge(map[i].name, map[i].Edges[j].v->name);
+      delete del;
+    }
+  }
+  for (int i = (int)map.size() - 1; i >= 0; i--)
+  {
+    Room* del = findVertex(map[i].name);
+    std::cout << "deleting room: " << map[i].name << std::endl;
+    delete del;
+  }
 }
 
 void Ship::addRoom(string n, string d)
