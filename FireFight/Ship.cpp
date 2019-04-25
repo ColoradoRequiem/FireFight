@@ -59,17 +59,14 @@ Ship::Ship() // we could do this in the main, but i want the main to be the game
   addTool("Code", 0, "BedroomTwo");
   addTool("Crowbar", 5, "BedroomOne");
   addTool("Fire Extinguisher", 10, "Storage");
-  //
-  // addObsticle("It feels like heavy boxes have fallen against the other side.", "Crowbar", "Your measly hands have no effect", "you successfully heave the door open and the boxes fall over.","Cockpit","Hall");
-  // addObsticle("As soon as you open the door flames billow out towards you.","Fire Extinguisher","You need equipment to put out the fire", "You successfully put the flames out with the Extinguisher","Hold","Engine");
-  // addObsticle("You need a code in order to open this door","Code","You dont know the code","You enter in the correct code","Overlook","Airlock");
-  // addObsticle("The latch appears to be stuck although could be opened if you had some leverage.","Crowbar","You dont have enough strength.","You manage to wrench it open.","Hall","Storage");
 
-  // Begin in Bedroom 1
+  // Adding Obsticles
+  addObsticle("It feels like heavy boxes have fallen against the other side.", "Crowbar", "Your measly hands have no effect", "you successfully heave the door open and the boxes fall over.","Cockpit","Hall");
+  addObsticle("As soon as you open the door flames billow out towards you.","Fire Extinguisher","You need equipment to put out the fire", "You successfully put the flames out with the Extinguisher","Hold","Engine");
+  addObsticle("You need a code in order to open this door","Code","You dont know the code","You enter in the correct code","Overlook","Airlock");
+  addObsticle("The latch appears to be stuck although could be opened if you had some leverage.","Crowbar","You dont have enough strength.","You manage to wrench it open.","Hall","Storage");
 
-
-
-  // findEdge("Overlook","Airlock"); // Begins at Bedroom 1;
+  location = *findVertex("Cockpit");
 }
 Ship::~Ship()
 {
@@ -129,13 +126,10 @@ Edge* Ship::findEdge(string room1, string room2)
 {
   Room* r1 = findVertex(room1);
   bool found = false;
-  std::cout <<(int)map.size() << " ";
   for (int i = 0; i < (int)map.size(); i++)
   {
     if (map[(unsigned)i].name == room1)
     {
-      std::cout << (int)(map[(unsigned)i].Edges.size());
-
       for (int j = 0; j < (int)(map[(unsigned)i].Edges.size()); j++)
       {
         if (map[(unsigned)i].Edges[(unsigned)j].v->name == room2)
@@ -189,6 +183,13 @@ void Ship::addTool(string n, int w, string room)
 
   Room* rOne = findVertex(room);
   rOne->objects.push_back(t);
+
+  std::cout << rOne->name << " -> ";
+  for(int i = 0; i < (int)rOne->objects.size();i++){
+      std::cout << rOne->objects[i].name << " ";
+  }
+  std:: cout << std::endl;
+
 }
 
 std::string Ship::searchRoom(){
