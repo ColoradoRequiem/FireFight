@@ -4,8 +4,9 @@ int main()
 {
   Ship TheHenry;
 
-
-
+  TheHenry.moveRoom(1);
+  std::cout << TheHenry.roomDescription() << std::endl;
+  TheHenry.moveRoom(1);
 
 
 

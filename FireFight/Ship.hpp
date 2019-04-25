@@ -66,8 +66,9 @@ public:
   std::string buttonValue(int b); // Returns button Text
   std::string roomDescription(); // Returns Room description text
 
-  std::string canEnter(int n); // Returns if selected room can be entered
+//  std::string canEnter(int n); // Returns if selected room can be entered
   void moveRoom(int n); //Changes room based on option selected
+  bool open(int n); //Returns wheterer or not a room can be traversed
 
   void reset(); // Resets inventory and location
 

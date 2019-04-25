@@ -66,7 +66,7 @@ Ship::Ship() // we could do this in the main, but i want the main to be the game
   addObsticle("You need a code in order to open this door","Code","You dont know the code","You enter in the correct code","Overlook","Airlock");
   addObsticle("The latch appears to be stuck although could be opened if you had some leverage.","Crowbar","You dont have enough strength.","You manage to wrench it open.","Hall","Storage");
 
-  location = *findVertex("Cockpit");
+  location = *findVertex("BedroomOne");
 
   std::cout << "=====================================================================================" << std:: endl;
 }
@@ -247,10 +247,10 @@ void Ship::reset(){
     }
 }
 
-std::string Ship::canEnter(int n){
-    // Does
-    return "";
-}
+//std::string Ship::canEnter(int n){
+//    // Does
+//    return "";
+//}
 
 void Ship::moveRoom(int n){
     std::cout << "Trying to move room" << std::endl;
@@ -261,4 +261,23 @@ void Ship::moveRoom(int n){
 
     std::cout << n << " " << tempRoom->name << " selected" <<std::endl;
     location = *tempRoom;
+}
+
+bool Ship::open(int n){
+    bool open = false;
+    if(!(location.Edges[(unsigned)(n-1)].obsticles.size()>0)){
+        open = true;
+    }else{
+        for(int i = 0; i < (int)bag.size();i++){
+            if(bag[(unsigned)i].name == location.Edges[(unsigned)(n-1)].obsticles[0].tool){
+                open = true;
+            }
+        }
+    }
+    if(open){
+        std::cout << "This Door is Open" << std::endl;
+    }else{
+        std::cout << "This Door is Closed" << std::endl;
+    }
+    return open;
 }
