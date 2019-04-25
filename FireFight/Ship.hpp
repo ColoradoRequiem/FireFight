@@ -13,7 +13,7 @@ struct Edge
 {
   Room *v;
   std::string description;
-  bool access; // will or will not let player pass
+  //bool access; // will or will not let player pass
   std::vector<Impediment> obsticles; // will change the "access" of certain 'Edges'
 };
 

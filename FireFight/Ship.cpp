@@ -67,10 +67,21 @@ Ship::Ship() // we could do this in the main, but i want the main to be the game
   addObsticle("The latch appears to be stuck although could be opened if you had some leverage.","Crowbar","You dont have enough strength.","You manage to wrench it open.","Hall","Storage");
 
   location = *findVertex("Cockpit");
+
+  std::cout << "=====================================================================================" << std:: endl;
 }
 Ship::~Ship()
 {
-
+  // for (int i = 0; i < (int)map.size(); i++)
+  // {
+  //   std::cout << "Deleting " << map[i].name << " Edges: " << std:: endl;
+  //   for (int j = 0; j < (int)map[i].Edges.size(); j++)
+  //   {
+  //     std::cout << " -> " << map[i].Edges[j].v->name << std::endl;
+  //     delete (findEdge(map[i].name, map[i].Edges[j].v->name));
+  //   }
+  //   delete (findVertex(map[i].name));
+  // }
 }
 
 void Ship::addRoom(string n, string d)
@@ -95,7 +106,7 @@ void Ship::addEdge(std::string room1, std::string room2, std::string d)
   Edge* n = new Edge;
   n->v = rTwo;
   n->description = d;
-  n->access = true;
+  // n->access = true;
 //  vector<Impediment> temp;
 //  n->obsticles = temp;
 
@@ -157,7 +168,7 @@ void Ship::addObsticle(string d, string t, string f, string s, string room1, str
   n.e = findEdge(room1, room2);
   //std::cout << n.e;
 
-  n.e->access = false; //?
+  //n.e->access = false; //?
   n.e->obsticles.push_back(n);
   std::cout << "Added obsticle from " << room1 << " -> " << n.e->v->name << std::endl;
 }
@@ -169,7 +180,7 @@ void Ship::removeObsticle(string room1, string room2)
   {
     if (e->obsticles[(unsigned)i].e->v->name == room2)
     {
-      e->obsticles[(unsigned)i].e->access = true;
+      //e->obsticles[(unsigned)i].e->access = true;
       e->obsticles[(unsigned)i].active = false;
     }
   }
