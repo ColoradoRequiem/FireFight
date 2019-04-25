@@ -6,12 +6,22 @@
 
 
 // Game Struct Definitions
-struct Edge;
-    struct Tool
-    {
-      int weight;
-      std::string name;
-    };
+struct Room;
+struct Impediment;
+
+struct Edge
+{
+  Room *v;
+  std::string description;
+  bool access; // will or will not let player pass
+  std::vector<Impediment> obsticles; // will change the "access" of certain 'Edges'
+};
+
+struct Tool
+{
+  int weight;
+  std::string name;
+};
 
 struct Room
     {
@@ -32,13 +42,7 @@ struct Impediment
       Edge *e;
     };
 
-struct Edge
-    {
-      Room *v;
-      std::string description;
-      bool access; // will or will not let player pass
-      std::vector<Impediment> obsticles; // will change the "access" of certain 'Edges'
-    };
+
 
 
 class Ship
@@ -63,7 +67,7 @@ private:
   std::vector<Room> map; //stores vertices (room)
   std::vector<Tool> bag;
 
-  Room location; // Stores your current location (starts at Bedroom One)
+  Room location; // Stores your current location (starts at Cockpit)
 
   Room *findVertex(std::string name);
   Edge *findEdge(std::string room1, std::string room2);
