@@ -60,7 +60,16 @@ public:
 
   void addTool(std::string n, int w, std::string room);
 
+  // Plays with UI
+
   std::string searchRoom();
+  std::string buttonValue(int b); // Returns button Text
+  std::string roomDescription(); // Returns Room description text
+
+  std::string canEnter(int n); // Returns if selected room can be entered
+  void moveRoom(int n); //Changes room based on option selected
+
+  void reset(); // Resets inventory and location
 
 
 private:
@@ -71,6 +80,8 @@ private:
 
   Room *findVertex(std::string name);
   Edge *findEdge(std::string room1, std::string room2);
+
+
 
 };
 

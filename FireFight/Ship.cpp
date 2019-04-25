@@ -115,7 +115,7 @@ void Ship::addEdge(std::string room1, std::string room2, std::string d)
   std::cout << rOne->name << " --> ";
 
   for(int i = 0; i < (int)rOne->Edges.size();i++){
-      std::cout << rOne->Edges[i].v->name << " ";
+      std::cout << rOne->Edges[(unsigned)i].v->name << " ";
   }
 
   std::cout << " <> End EDGE" << std::endl;
@@ -135,7 +135,6 @@ Room* Ship::findVertex(std::string name)
 
 Edge* Ship::findEdge(string room1, string room2)
 {
-  Room* r1 = findVertex(room1);
   bool found = false;
   for (int i = 0; i < (int)map.size(); i++)
   {
@@ -197,17 +196,63 @@ void Ship::addTool(string n, int w, string room)
 
   std::cout << rOne->name << " -> ";
   for(int i = 0; i < (int)rOne->objects.size();i++){
-      std::cout << rOne->objects[i].name << " ";
+      std::cout << rOne->objects[(unsigned)i].name << " ";
   }
   std:: cout << std::endl;
 
 }
 
+// Functions that play with UI
+
 std::string Ship::searchRoom(){
     Room * r = &location;
     if(r->objects.size() != 0){
+
+        bag.push_back(r->objects[0]);
         return r->objects[0].name;
     }else{
         return "nothing";
     }
+}
+
+std::string Ship::buttonValue(int b){ // Returns button Text
+    if(location.Edges.size()>=(unsigned)b){
+        return location.Edges[(unsigned)(b-1)].description;
+    }else{
+        return "";
+    }
+}
+
+
+std::string Ship::roomDescription(){ // Returns button Text
+    std::cout << "called description" << std::endl;
+    return location.description;
+}
+
+void Ship::reset(){
+    // Resets Location
+    std::cout << "Resetting Location" << std::endl;
+    location = *findVertex("Cockpit");
+
+    //Resets Inventory
+    std::cout << "Resetting Inventory" << std::endl;
+    while(bag.size()!=0){
+        bag.pop_back();
+    }
+}
+
+std::string Ship::canEnter(int n){
+    // Does
+    return "";
+}
+
+void Ship::moveRoom(int n){
+    std::cout << "Trying to move room" << std::endl;
+    Edge tempEdge = location.Edges[(unsigned)(n-1)];
+    std::cout << "Created tempEdge" << std::endl;
+    Room * tempRoom = tempEdge.v;
+    std::cout << "Created tempRoom" << std::endl;
+
+    std::cout << n << " " << tempRoom->name << " selected" <<std::endl;
+    location = *tempRoom;
 }
